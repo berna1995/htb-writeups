@@ -1,5 +1,5 @@
-# :fountain_pen: Hack The Box ~ Writeups
-This are my writeups of my pwned boxes hosted on [HackTheBox](https://app.hackthebox.com/).
+# :black_nib: Hack The Box ~ Writeups
+This repository contains my writeups of the boxes i successfully pwned that are hosted on [HackTheBox](https://app.hackthebox.com/).
 
 ## Pwned Boxes
 
