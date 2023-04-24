@@ -282,7 +282,7 @@ Rows matched: 1  Changed: 1  Warnings: 0
 
 At this point you can login to gitea using the same password of the cody user.
 Logging in the gitea instance admin will expose a repository containing administrations scripts, in particular the one that you can run as sudo with the *svc* user.
-I copied over the scripts in this repository for the sake of documentation in the *gitea-administrator-scripts* sub-folder.
+I copied over the scripts in this repository for the sake of documentation in the [gitea-administrator-scripts](./gitea-administrator-scripts) sub-folder.
 
 We can see from the [system-checkup.py](./gitea-administrator-scripts/system-checkup.py) that the action full-checkup has a huge problem, which is also the reason we had the *something went wrong* message before. The python script is trying to launch a script called *full-checkup.sh* but instead of running it from the absolute path, is trying to run it from the current path, therefore we can create whatever *full-checkup.sh* file and run an arbitrary script.
 
