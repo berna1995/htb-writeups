@@ -1,6 +1,11 @@
-# [Busqueda](https://app.hackthebox.com/machines/Busqueda)
+# [Busqueda](https://app.hackthebox.com/machines/Busqueda) <!-- omit in toc --> 
 
 This was my first pwned box and even though it's an easy box it has some tricky points in my opinion.
+
+## Table of Contents  <!-- omit in toc --> 
+- [User Access](#user-access)
+- [Privilege Escalation](#privilege-escalation)
+- [Final Thoughts](#final-thoughts)
 
 ## User Access
 
@@ -312,7 +317,7 @@ snap
 
 There we go, we got root!
 
-## Final Toughts
+## Final Thoughts
 This was my first box and it was really fun, the points that lost me a lot of time were:
 - Crafting a working payload for the user reverse shell in the searchor web-app
 - Thinking I could exploit the *docker-inspect* command (look into template injection)
