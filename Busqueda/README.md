@@ -39,7 +39,7 @@ The webpage presents as a simple service to generate search query for different 
 
 The idea here is to inject something using this form.
 
-If you look carefully enough you can see at the header of the page something really interesting:
+If you look carefully enough you can see at the footer of the page something really interesting:
 
 ```
 Powered by Flask and Searchor 2.4.0
@@ -48,7 +48,7 @@ Powered by Flask and Searchor 2.4.0
 
 According to the Github release history, version 2.4.2 fixed a very bad vulnerability allowing execution of arbitrary code like explained in the [pull request](https://github.com/ArjunSharda/Searchor/pull/130).
 
-The fun part is that the webpage advertised version 2.4.0 so it should be running a vulnerable version, let's jump into the code to see how to exploit the vulnerability.
+The good part is that the webpage advertised version 2.4.0 so it should be running a vulnerable version, let's jump into the code to see how to exploit the vulnerability.
 
 You can see the vulnerable line with full context [here](https://github.com/ArjunSharda/Searchor/blob/v2.4.0/src/searchor/main.py#L33).
 
@@ -134,7 +134,7 @@ Here we have gathered many useful informations:
 - We have a local git host account (remember the gitea server we enumerated in the beginning?)
 - We have plain text credentials for user *cody* (password: **jh1usoih2bkjaspwe92**)
 
-You know, sometimes password get reused for many different thing, as a matter of fact, that one is also the password for *sudo*.
+You know, sometimes password get reused for many different things, as a matter of fact, that one is also the password for *sudo*.
 
 ```console
 svc@busqueda:/var/www/app$ sudo -l
@@ -157,7 +157,7 @@ Usage: /opt/scripts/system-checkup.py <action> (arg1) (arg2)
 Here we have a lot more informations gained:
 - We can run sudo, but we're just allowed to run a specific python3 script
 - We cannot read the python script
-- The python script suggests that we can run 3 different commands:
+- The python script suggests that we can run 3 different sub-commands:
     + docker-ps
     + docker-inspect
     + full-checkup
@@ -188,9 +188,9 @@ svc@busqueda:~$ sudo /usr/bin/python3 /opt/scripts/system-checkup.py docker-insp
 ...
 ```
 
-I omitted the output because json is not easy easy too read if not well-formatted, you can find a readable version of the commands [here](gitea-docker-inspect.json) for gitea and [here](mysql-docker-inspect.json) for mysql. 
+I omitted the output because json is not easy easy too read if not well-formatted, you can find a readable version of the commands output in [gitea-docker-inspect.json](gitea-docker-inspect.json) and in [mysql-docker-inspect.json](mysql-docker-inspect.json). 
 
-Anyhow, there are a lot more juicy informations gained from those commands:
+Anyhow, let's recap the informations gained from running the above commands:
 - The MySQL database is linked with the gitea instance
 - We gained the database name, user and password used by the gitea instance to connect
 - We gained the mysql root password
@@ -204,7 +204,8 @@ Something went wrong
 
 The *full-checkup* command seems to have some sort of problem, hard to figure out for now.
 
-Going into firefox and browsing the gitea instance I didn't found much, even if logged in with cody user, I decided to login as admin but I didn't know the password so i jumped into the database.
+Going into firefox and browsing the gitea instance I didn't find much, even if logged in with cody user.
+I decided to login as admin but I didn't know the password so I decided to jump into the database.
 
 ```console
 svc@busqueda:~$ mysql -h 127.0.0.1 -u root --password jI86kGUuj87guWr3RyF
@@ -266,7 +267,7 @@ mysql> select name,salt,passwd from user;
 2 rows in set (0.00 sec)
 ```
 
-I couldn't quite figure out the hashing algorithm in order to set a custom password for administrator, and I didn't want to look at the gitea sources so i decided to copy the same salt and password from the cody user.
+I couldn't quite figure out the hashing algorithm in order to set a custom password for administrator, and I didn't want to look at the gitea sources nor try to crach the hash so i decided to copy the same salt and password from the cody user.
 
 ```console
 mysql> update user set salt="d1db0a75a18e50de754be2aafcad5533", passwd="b1f895e8efe070e184e5539bc5d93b362b246db67f3a2b6992f37888cb778e844c0017da8fe89dd784be35da9a337609e82e" where name="administrator";
@@ -274,13 +275,13 @@ Query OK, 1 row affected (0.00 sec)
 Rows matched: 1  Changed: 1  Warnings: 0
 ```
 
-At this point you can login to gitea using the same cody user password.
+At this point you can login to gitea using the same password of the cody user.
 Logging in the gitea instance admin will expose a repository containing administrations scripts, in particular the one that you can run as sudo with the *svc* user.
 I copied over the scripts in this repository for the sake of documentation in the [gitea-administrator-scripts](./gitea-administrator-scripts) folder.
 
-We can see from the [system-checkup.py](./gitea-administrator-scripts/system-checkup.py) that the action full-checkup has a huge problem, which is also reason we had the *something went wrong* message before. The python script is trying to launch a script called *full-checkup.sh* but instead of trying to run it from the absolute path, is trying to run it from the current path, therefore we can create whatever *full-checkup.sh* file and run an arbitrary script.
+We can see from the [system-checkup.py](./gitea-administrator-scripts/system-checkup.py) that the action full-checkup has a huge problem, which is also the reason we had the *something went wrong* message before. The python script is trying to launch a script called *full-checkup.sh* but instead of running it from the absolute path, is trying to run it from the current path, therefore we can create whatever *full-checkup.sh* file and run an arbitrary script.
 
-For example, let's put a reversh shell script inside a newly created *full-checkup.sh*:
+For example, let's put a reversh shell command inside a newly created *full-checkup.sh*:
 
 ```sh
 #!/bin/bash
@@ -314,7 +315,7 @@ There we go, we got root!
 ## Final Toughts
 This was my first box and it was really fun, the points that lost me a lot of time were:
 - Crafting a working payload for the user reverse shell in the searchor web-app
-- Thinking i could exploit the *docker-inspect* command (look into template injection)
+- Thinking I could exploit the *docker-inspect* command (look into template injection)
 - Thinking that i could simply change the *system-checkup.py* once i gained access to gitea
 
-In the end I think it was pretty straightforward for an experienced person, which I'm not.
+In the end I think it was pretty straightforward for an experienced person, which I'm not, but I managed.
