@@ -5,6 +5,6 @@ This repository contains my writeups of the boxes i successfully pwned that are 
 
 :warning: I suggest not to spoiler yourself the solutions of the boxes unless you're really hardstuck or you want to see if the solution path is the same as yours. Before looking at the solutions I suggest you to take a look at the hints that people usually give on the [HackTheBox Forum](https://forum.hackthebox.com/).
 
-| Machine Name | Difficulty | Writeups |
+| Machine Name | Difficulty | Writeup |
 | :----------: | :--------: | :------: |
-| Template | Easy | [link]() |
+| Busqueda | Easy | [here](./Busqueda/README.md) |
