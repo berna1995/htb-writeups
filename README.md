@@ -8,6 +8,7 @@ This repository contains my write-ups of the boxes I successfully pwned that are
 | Machine Name | Difficulty |           Writeup            |
 | :----------: | :--------: | :--------------------------: |
 |   Busqueda   |    Easy    | [here](./Busqueda/README.md) |
+|   MetaTwo    |    Easy    | [here](./MetaTwo/README.md)  |
 
 ## Disclaimer
 
