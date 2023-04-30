@@ -5,10 +5,10 @@ This repository contains my write-ups of the boxes I successfully pwned that are
 
 :warning: I suggest not to spoiler yourself the solutions of the boxes unless you're really stuck or you want to see if the solution path is the same as yours. Before looking at the solutions I suggest you to take a look at the hints that people usually give on the [HackTheBox Forum](https://forum.hackthebox.com/).
 
-| Machine Name | Difficulty |           Writeup            |
-| :----------: | :--------: | :--------------------------: |
-|   Busqueda   |    Easy    | [here](./Busqueda/README.md) |
-|   MetaTwo    |    Easy    | [here](./MetaTwo/README.md)  |
+| Machine Name | Difficulty |           Writeup            |         Topics          |
+| :----------: | :--------: | :--------------------------: | :---------------------: |
+|   Busqueda   |    Easy    | [here](./Busqueda/README.md) |   Python, Docker, SQL   |
+|   MetaTwo    |    Easy    | [here](./MetaTwo/README.md)  | Wordpress, Hashing, FTP |
 
 ## Disclaimer
 
